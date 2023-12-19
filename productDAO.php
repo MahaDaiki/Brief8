@@ -1,6 +1,6 @@
 <?php
 require_once("Connection.php");
-require_once("products.php");
+require_once("Classproducts.php");
 
 
 class fetchingdata {

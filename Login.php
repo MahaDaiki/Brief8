@@ -1,3 +1,6 @@
+<?php
+require_once("Loginconfig.php")
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -11,24 +14,24 @@
 
 <div class="login-box">
   <h2>Login</h2>
-  <form>
+  <form action="Loginconfig.php" method="post">
     <div class="user-box">
         <ion-icon name="mail-outline"></ion-icon>
-      <input type="text" name="" required="">
+      <input type="text" name="username" required>
       <label>User name</label>
     </div>
     <div class="user-box">
     <ion-icon name="lock-closed-outline"></ion-icon>
-      <input type="password" name="" required="">
+      <input type="password" name="password" required>
       <label>Password</label>
     </div>
-    <a href="#"  >
+    <button type="submit" class="btn btn-outline-primary">
       <span></span>
       <span></span>
       <span></span>
       <span></span>
       Login
-    </a><a class="register" href="#">Register</a>
+</button><button class="btn btn-outline-primary" class="register" onclick="window.location.href='Register.php'" >Register</button>
     <div >
       
     </div>

@@ -1,3 +1,6 @@
+<?php
+require_once("Registerconfig.php");
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -11,10 +14,10 @@
 
 <div class="login-box " >
   <h2>Register</h2>
-  <form>
+  <form action="Registerconfig.php" method="post" >
     <div class="user-box">
         <ion-icon name="mail-outline"></ion-icon>
-      <input type="name" name="username" required>
+      <input type="name" name="fullname" required>
       <label>Full name</label>
     </div> 
     <div class="user-box">
@@ -29,13 +32,13 @@
         </div> 
         <div class="user-box">
             <ion-icon name="mail-outline"></ion-icon>
-          <input type="number" name="phonenumber" required>
-          <label>Full name</label>
+          <input type="tel" name="phonenumber" required>
+          <label>Phonenumber</label>
         </div> 
         <div class="user-box">
             <ion-icon name="mail-outline"></ion-icon>
-          <input type="text" name="Adresse" required>
-          <label>Adress</label>
+          <input type="address" name="address" required>
+          <label>Address</label>
         </div> 
         <div class="user-box">
             <ion-icon name="mail-outline"></ion-icon>
@@ -49,16 +52,16 @@
     </div>
     <div class="user-box">
         <ion-icon name="lock-closed-outline"></ion-icon>
-          <input type="password" name="Password" required>
+          <input type="password" name="confirm_password" required>
           <label>Verify Password</label>
         </div>
-    <a href="#"  >
+    <button  type="submit">
       <span></span>
       <span></span>
       <span></span>
       <span></span>
       Register
-    </a>
+</button>
     <div >
       
     </div>

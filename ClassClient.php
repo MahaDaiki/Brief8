@@ -5,17 +5,17 @@ class Client{
     private	$username;
     private	$email;
     private	$phonenumber;
-    private	$adresse;	
+    private	$address;	
     private $city;
     private	$passw;
     private	$valide;
-    public function __construct($id,$fullname,$username,$email,$phonenumber,$adresse,$city,$passw,$valide){
+    public function __construct($id,$fullname,$username,$email,$phonenumber,$address,$city,$passw,$valide){
         $this->id = $id;
         $this->fullname = $fullname;
         $this->username = $username;
         $this->email = $email;
         $this->phonenumber = $phonenumber;
-        $this->adresse = $adresse;
+        $this->address = $address;
         $this->city = $city;
         $this->passw = $passw;
         $this->valide = $valide;
@@ -64,9 +64,9 @@ class Client{
     /**
      * Get the value of adresse
      */ 
-    public function getAdresse()
+    public function getAddress()
     {
-        return $this->adresse;
+        return $this->address;
     }
 
     /**
