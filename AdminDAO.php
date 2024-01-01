@@ -3,15 +3,13 @@ require_once("Connection.php");
 require_once("Admin.php");
 
 
-
-
 class AdminDAO {
     private $db;
     public function __construct(){
         $this->db = DatabaseConnection::getInstance()->getConnection(); 
     }
 
-    public function get_Clients(){
+    public function get_Admins(){
         $query = "SELECT * FROM admins";
         $stmt = $this->db->query($query);
         $stmt -> execute();
@@ -39,9 +37,7 @@ class AdminDAO {
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
     
         if ($admin) {
-            // Admin found, verify plain text password
             if ($password === $admin['passw']) {
-                // Authentication successful for admin
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_username'] = $admin['username'];
                 return true;

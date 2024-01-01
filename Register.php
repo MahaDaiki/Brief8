@@ -12,7 +12,7 @@ require_once("Registerconfig.php");
 </head>
 <body>
 
-<div class="login-box " >
+<div class="login-box  " style="margin-top: 140px" >
   <h2>Register</h2>
   <form action="Registerconfig.php" method="post" >
     <div class="user-box">

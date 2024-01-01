@@ -1,3 +1,8 @@
+body{
+  background: linear-gradient(to bottom, #f0f0f0, #6ab1e7);
+}
+
+
 .product-card:hover {
     cursor: pointer;
     transform: scale(1.1);
@@ -21,8 +26,6 @@
   
   .menuwrpopen{
     max-height: 400px;
-    
-  
    }
   
    .submenu{

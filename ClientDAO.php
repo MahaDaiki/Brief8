@@ -18,7 +18,7 @@ class ClientDAO {
         $clientData = $stmt->fetchAll();
         $Client = array();
         foreach ($clientData as $c) { 
-            $Client[] = new Client ($c["id"],$c["fullname"],$c["username"],$c["email"],$c["phonenumber"],$c["adresse"],$c["city"],$c["passw"],$c["valide"]);
+            $Client[] = new Client ($c["id"],$c["fullname"],$c["username"],$c["email"],$c["phonenumber"],$c["address"],$c["city"],$c["passw"],$c["valide"]);
          
         }
         return $Client;

@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Create a new instance of UserDAO and add the user to the database
     $ClientDAO = new ClientDAO();
     $ClientDAO->insert_Clients($Client);
-    
+    header('Location: login.php');
 
 }
 catch (Exception $e){

@@ -1,26 +1,20 @@
 <?php
-require_once("productDAO.php");
 require_once("categoryDAO.php");
-$product = new fetchingdata();
-$Products = $product->product();
+require_once("ManageConfig.php");
+$categories = new CategoryDAO();
 
-$Category = new CategoryDAO();
-$Categories = $Category->get_category();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>ELECTRO NACER - HOME</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/home.css">
+    <title>Edit Category</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" 
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
+<body style="background: linear-gradient(to bottom, #6ab1e7,#023364)">
 <nav class="navbar navbar-expand-sm navbar-dark ">
     <div class="container">
         <a href="#" class="navbar-brand">NE</a>
@@ -41,7 +35,7 @@ $Categories = $Category->get_category();
 
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
-            <div class="menuwrp" id="subMenu">
+            <div class="menuwrp" id="subMenu"  style="z-index: 99">
                 <div class="submenu">
                     <div class="userinfo">
                     <?php
@@ -82,41 +76,32 @@ $Categories = $Category->get_category();
         </div>
     </div>
 </nav>
-<section class="home-welcome-section">
+<?php if ($categoryDetails) : ?>
+<div class="container">
+    <form method="post" action="" enctype="multipart/form-data" class="bg-light p-4 rounded formedit my-5">
+        <h2 class="mb-4 text-center">Edit Category</h2>
 
-<div class="home-welcome-p-container">
-    <p class="home-welcome-p">ELECTRO NACER</p>
+        <div class="mb-3">
+            <label for="new_catname" class="form-label">Category Name:</label>
+     <h3> <?php echo $category->getCatname(); ?></h3>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_description" class="form-label">Description:</label>
+            <textarea class="form-control form-control-sm" id="new_description" name="new_description"><?php echo $category->getDescrip(); ?></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_image" class="form-label">Image:</label>
+            <input type="file" class="form-control-file" id="new_image" name="new_image">
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" name="update">Update</button>
+        </div>
+    </form>
 </div>
-
-
-<div class="home-welcome-img-container">
-    <img class="home-welcome-img" src="img/background.jpg">
-</div>
-
-</section>
-<h3 style="color: rgb(0, 137, 236); margin: 50px;">
-        CATEGORIES
-        <small class="text-muted">Many and many categories and special pieces</small>
-    </h3>
-  
-    <?php
-         echo '<div class="card-deck " style="margin: 50px; ">';
-         foreach ($Categories as $Category) {
-             echo '<div class="card product-card" style="background: linear-gradient(to right, #64B5F6, #2196F3) ">';
-             echo '<img class="card-img-top" src="' . $Category->getImgs() . '" alt="Card image cap">';
-             echo '<div class="card-body">';
-             echo '<h5 class="card-title">' . $Category->getCatname() . '</h5>';
-             echo '<p class="card-text">' . $Category->getDescrip() . '</p>';
-             echo '</div>';
-             echo '</div>';
-         }
-         echo '</div>';
-         ?>
-     <script src="index.js"></script>
-     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-
+<?php endif; ?>
+<script src="index.js"></script>
 </body>
 </html>
