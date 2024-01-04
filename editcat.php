@@ -78,7 +78,7 @@ $categories = new CategoryDAO();
 </nav>
 <?php if ($categoryDetails) : ?>
 <div class="container">
-    <form method="post" action="" enctype="multipart/form-data" class="bg-light p-4 rounded formedit my-5">
+    <form method="post" action="" enctype="multipart/form-data" class="bg-light p-4 rounded formedit my-5 justify-content-center text-center">
         <h2 class="mb-4 text-center">Edit Category</h2>
 
         <div class="mb-3">
@@ -88,20 +88,31 @@ $categories = new CategoryDAO();
 
         <div class="mb-3">
             <label for="new_description" class="form-label">Description:</label>
-            <textarea class="form-control form-control-sm" id="new_description" name="new_description"><?php echo $category->getDescrip(); ?></textarea>
+            <textarea class="form-control form-control-sm p-4 " id="new_description" name="new_description"><?php echo $category->getDescrip(); ?></textarea>
         </div>
 
         <div class="mb-3">
             <label for="new_image" class="form-label">Image:</label>
-            <input type="file" class="form-control-file" id="new_image" name="new_image">
+            <input type="file" class="form-control-file ml-5" id="new_image" name="new_image">
         </div>
 
         <div class="d-grid gap-2">
             <button type="submit" class="btn btn-primary" name="update">Update</button>
+            <button type="submit" class="btn btn-danger" name="delete">Delete</button><hr>
+                </form>
+        <a href="ManageCategories.php">Back to Categories -></a>
         </div>
     </form>
 </div>
 <?php endif; ?>
+
+
+<footer class=" bg-primary text-light text-center text-lg-start mt-4">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2023 Copyright:ElectroNacer
+    </div>
+
+  </footer>
 <script src="index.js"></script>
 </body>
 </html>

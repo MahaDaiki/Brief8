@@ -1,6 +1,6 @@
 <?php
 require_once("Connection.php");
-require_once("Classproducts.php");
+include("Classproducts.php");
 
 
 class fetchingdata {
@@ -22,79 +22,182 @@ class fetchingdata {
         return $Products;
 
 }
-public function get_Product($page, $limit, $sortAlphabetically, $searchQuery, $stockFilter, $category) {
-    $offset = ($page - 1) * $limit;
-    $searchFilter = '%' . htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') . '%';
 
-    $query = "SELECT * FROM products WHERE bl = 1";
+public function filter( $categoryFilter , $sortAlphabetically , $stockFilter , $searchQuery )
+{
+    $sql = 'SELECT * FROM products WHERE bl = 1';
 
-    // Apply filters
-    if ($category !== null && !empty($category)) {
-        $categoryArray = json_decode($category, true);
-        if (is_array($categoryArray)) {
-            $categoryFilter = implode("','", $categoryArray);
-            $query .= " AND category_name IN ('$categoryFilter')";
-        }
-    }
-
-    if ($searchFilter != '') {
-        $query .= " AND (productname LIKE :searchFilter OR descrip LIKE :searchFilter)";
-    }
-
-    if ($stockFilter) {
-        $query .= " AND stock_quantity < min_quantity";
+    // Check if a category filter is provided
+    if (!empty($categoryFilter)) {
+        $sql .= " AND category_name = :categoryFilter";
     }
 
     // Apply sorting
     if ($sortAlphabetically) {
-        $query .= " ORDER BY productname ASC";
+        $sql .= " ORDER BY productname ASC";
     }
 
-    // Pagination
-    $query .= " LIMIT :offset, :limit";
+    // Apply stock filter
+    if ($stockFilter) {
+        $sql .= " AND stock_quantity > 0"; // Adjust the condition as needed
+    }
 
-    $stmt = $this->db->prepare($query);
-    $stmt->bindParam(':searchFilter', $searchFilter, PDO::PARAM_STR);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    // Apply search filter
+    if (!empty($searchQuery)) {
+        $sql .= " AND (productname LIKE :searchQuery OR descrip LIKE :searchQuery)";
+    }
+
+    $stmt = $this->db->prepare($sql);
+
+    // Bind parameters
+    if (!empty($categoryFilter)) {
+        $stmt->bindParam(':categoryFilter', $categoryFilter, PDO::PARAM_STR);
+    }
+
+    if (!empty($searchQuery)) {
+        $searchQuery = '%' . $searchQuery . '%';
+        $stmt->bindParam(':searchQuery', $searchQuery, PDO::PARAM_STR);
+    }
 
     $stmt->execute();
-    $productData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $products = array();
-    foreach ($productData as $data) {
-        $products[] = new Product(
-            $data["reference"],
-            $data["imgs"],
-            $data["productname"],
-            $data["barcode"],
-            $data["purchase_price"],
-            $data["final_price"],
-            $data["price_offer"],
-            $data["descrip"],
-            $data["min_quantity"],
-            $data["stock_quantity"],
-            $data["category_name"],
-            $data["bl"]
+    // Fetch results as associative array
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $productObjects = [];
+    foreach ($results as $result) {
+        $productObjects[] = new Product(
+            $result['reference'],
+            $result['imgs'],
+            $result['productname'],
+            $result['barcode'],
+            $result['purchase_price'],
+            $result['final_price'],
+            $result['price_offer'],
+            $result['descrip'],
+            $result['min_quantity'],
+            $result['stock_quantity'],
+            $result['category_name'],
+            $result['bl'],
         );
     }
 
-    return $products;
+    return $productObjects;
 }
 
 
+public function get_Product($offset, $productsPerPage, $categoryFilter = '')
+{
+    $sql = 'SELECT * FROM products WHERE bl = 1';
 
-    public function insert_product($Products, $imageFile){
-        $imagePath = "img/";
-        $imageFileName = basename($Products->getImgs()); 
-        $imageFilePath = $imagePath . $imageFileName;
-        move_uploaded_file($Products->getImgs(), $imageFilePath);
-           
-        $query= "INSERT INTO products VALUES (0,'$imageFilePath','".$Products->getProductname()."',".$Products->getBarcode().",".$Products->getPurchase_price().",".$Products->getFinal_price().",".$Products->getPrice_offer().",'".$Products->getDescrip()."',".$Products->getMin_quantity().",".$Products->getStock_quantity().",'".$Products->getCategory_name()."',".$Products->getBl().") ";
-        $stmt = $this->db->query($query);
-         $stmt -> execute();
-
+    // Check if a category filter is provided
+    if (!empty($categoryFilter)) {
+        $sql .= " AND category_name = '$categoryFilter'";
     }
+
+    $sql .= " LIMIT $offset, $productsPerPage";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+
+    // Fetch results as associative array
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $productObjects = [];
+    foreach ($results as $result) {
+        $productObjects[] = new Product(
+            $result['reference'],
+            $result['imgs'],
+            $result['productname'],
+            $result['barcode'],
+            $result['purchase_price'],
+            $result['final_price'],
+            $result['price_offer'],
+            $result['descrip'],
+            $result['min_quantity'],
+            $result['stock_quantity'],
+            $result['category_name'],
+            $result['bl'],
+        );
+    }
+
+    return $productObjects;
+}
+
+// public function get_Product($page, $limit, $sortAlphabetically, $searchQuery, $stockFilter, $category) {
+//     $offset = ($page - 1) * $limit;
+//     $searchFilter = '%' . htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') . '%';
+
+//     $query = "SELECT * FROM products WHERE bl = 1";
+
+//     // Apply filters
+//     if ($category !== null && !empty($category)) {
+//         $categoryArray = json_decode($category, true);
+//         if (is_array($categoryArray)) {
+//             $categoryFilter = implode("','", $categoryArray);
+//             $query .= " AND category_name IN ('$categoryFilter')";
+//         }
+//     }
+
+//     if ($searchFilter != '') {
+//         $query .= " AND (productname LIKE '$searchFilter' OR descrip LIKE '$searchFilter')";
+//     }
+
+//     if ($stockFilter) {
+//         $query .= " AND stock_quantity < min_quantity";
+//     }
+
+//     // Apply sorting
+//     if ($sortAlphabetically) {
+//         $query .= " ORDER BY productname ASC";
+//     }
+
+//     // Pagination
+//     $query .= " LIMIT $offset, $limit";
+
+//     $productData = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+
+//     $products = array();
+//     foreach ($productData as $data) {
+//         $products[] = new Product(
+//             $data["reference"],
+//             $data["imgs"],
+//             $data["productname"],
+//             $data["barcode"],
+//             $data["purchase_price"],
+//             $data["final_price"],
+//             $data["price_offer"],
+//             $data["descrip"],
+//             $data["min_quantity"],
+//             $data["stock_quantity"],
+//             $data["category_name"],
+//             $data["bl"]
+//         );
+//     }
+
+//     return $products;
+// }
+
+
+
+public function insert_product($Product, $imageFile) {
+    $imagePath = "img/";
+    $imageFileName = basename($imageFile);
+    $imageFilePath = $imagePath . $imageFileName;
+
+    move_uploaded_file($imageFile, $imageFilePath);
+
+    $query = "INSERT INTO products 
+              VALUES (0, '$imageFilePath', '".$Product->getProductname()."', ".$Product->getBarcode().",
+                      ".$Product->getPurchase_price().", ".$Product->getFinal_price().", ".$Product->getPrice_offer().",
+                      '".$Product->getDescrip()."', ".$Product->getMin_quantity().", ".$Product->getStock_quantity().",
+                      '".$Product->getCategory_name()."', ".$Product->getBl().")";
+
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+}
+
+    
     // `category_name`='".$Product->getCategory_name()."', you removed it bcs   there were no inputs to  update it w ktb9a empty :D , `imgs`='".$Product->getImgs()."' same for this  
     // and wa9ila bcs foreign key ? 
     public function update_product($Product){
@@ -115,14 +218,35 @@ public function get_Product($page, $limit, $sortAlphabetically, $searchQuery, $s
     public function displayProductDetails($productId) {
         $sql = "SELECT * FROM Products WHERE reference = $productId";
         $stmt = $this->db->query($sql);
-        $stmt -> execute();
-        $row = $stmt->fetchAll();
-        $Products = array();
-        foreach ($row as $P) {
-            $Products[] = new Product ($P["reference"],$P["imgs"],$P["productname"],$P["barcode"],$P[ "purchase_price"], $P["final_price"] , $P["price_offer"] , $P["descrip"] , $P["min_quantity"] , $P["stock_quantity"] , $P["category_name"] , $P["bl"]);
+        
+        $productData = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($productData) {
+            $product = new Product(
+                $productData["reference"],
+                $productData["imgs"],
+                $productData["productname"],
+                $productData["barcode"],
+                $productData["purchase_price"],
+                $productData["final_price"],
+                $productData["price_offer"],
+                $productData["descrip"],
+                $productData["min_quantity"],
+                $productData["stock_quantity"],
+                $productData["category_name"],
+                $productData["bl"]
+            );
+            
+            return $product;
         }
-        return $Products;
+    
+        return null; // Return null if no product found
     }
+
+
+
+
+    
 //     public function filterProducts($page = 1, $recordsPerPage = 6)
 //     {
 //         $startFrom = ($page - 1) * $recordsPerPage;

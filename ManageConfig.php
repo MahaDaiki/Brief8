@@ -1,6 +1,7 @@
 <?php
-require_once("ManageConfig.php");
+
 require_once("categoryDAO.php");
+
 
 // Instantiate CategoryDAO
 $categoryDAO = new CategoryDAO();
@@ -49,11 +50,17 @@ if (isset($_GET['category_name'])) {
     }
 
     
-    if (isset($_POST['delete'])) {
-        $deleteData = new CategoryDAO();
-        $deleteData->deleteCategory($categoryName);
-        echo '<script>alert("Category deleted successfully!");</script>';
-        
+    $categories = new CategoryDAO();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+        // Assuming $categoryDetails is the category you want to delete
+        $categories->deleteCategory($categoryDetails->getCatname());
+    
+        // Redirect to the ManageCategories page after deletion
+        header("Location: ManageCategories.php");
+      
+    
     }
 }
+
 ?>

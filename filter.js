@@ -41,7 +41,7 @@ document.getElementById('search').addEventListener('input', function () {
 
 document.querySelectorAll('.common_selector').forEach(function (selector) {
     selector.addEventListener('change', function () {
-        filter_data(1); // Reset to the first page when changing filters
+        filter_data(1); 
     });
 });
 

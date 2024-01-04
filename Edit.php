@@ -4,6 +4,7 @@ require_once("Editconfig.php");
 require_once("categoryDAO.php");
 $product = new fetchingdata();
 
+
 ?>
 
 <!DOCTYPE html>
@@ -81,46 +82,46 @@ $product = new fetchingdata();
 <form method="post" action="" class="bg-light p-4 rounded formedit my-5">
     <h2 class="mb-4 text-center">Edit Product</h2>
 
-    <?php foreach ($productDetails as $product) : ?>
+    <?php if ($productDetails) : ?>
          <div class="mb-3">
                 <label for="productName" class="form-label">Product Name:</label>
-                <input type="text" class="form-control form-control-sm" id="productName" name="productname" value="<?php echo $product->getProductname(); ?>">
+                <input type="text" class="form-control form-control-sm" id="productName" name="productname" value="<?php echo $productDetails->getProductname(); ?>">
             </div>
 
             <div class="mb-3">
                 <label for="barcode" class="form-label">Barcode:</label>
-                <input type="text" class="form-control form-control-sm" id="barcode" name="barcode" value="<?php echo $product->getBarcode(); ?>">
+                <input type="text" class="form-control form-control-sm" id="barcode" name="barcode" value="<?php echo $productDetails->getBarcode(); ?>">
             </div>
     <div class="mb-3">
         <label for="purchasePrice" class="form-label">Purchase Price:</label>
-        <input type="text" class="form-control form-control-sm" id="purchasePrice" name="purchase_price" value="<?php echo $product->getPurchase_price(); ?>">
+        <input type="text" class="form-control form-control-sm" id="purchasePrice" name="purchase_price" value="<?php echo $productDetails->getPurchase_price(); ?>">
     </div>
 
     <div class="mb-3">
         <label for="finalPrice" class="form-label">Final Price:</label>
-        <input type="text" class="form-control form-control-sm" id="finalPrice" name="final_price" value="<?php echo $product->getFinal_price(); ?>">
+        <input type="text" class="form-control form-control-sm" id="finalPrice" name="final_price" value="<?php echo $productDetails->getFinal_price(); ?>">
     </div>
 
     <div class="mb-3">
         <label for="priceOffer" class="form-label">Price Offer:</label>
-        <input type="text" class="form-control form-control-sm" id="priceOffer" name="price_offer" value="<?php echo $product->getPrice_offer(); ?>">
+        <input type="text" class="form-control form-control-sm" id="priceOffer" name="price_offer" value="<?php echo $productDetails->getPrice_offer(); ?>">
     </div>
 
     <div class="mb-3">
         <label for="description" class="form-label">Description:</label>
-        <textarea class="form-control form-control-sm" id="description" name="descrip"><?php echo $product->getDescrip(); ?></textarea>
+        <textarea class="form-control form-control-sm" id="description" name="descrip"><?php echo $productDetails->getDescrip(); ?></textarea>
     </div>
 
     <div class="mb-3">
         <label for="minQuantity" class="form-label">Min Quantity:</label>
-        <input type="text" class="form-control form-control-sm" id="minQuantity" name="min_quantity" value="<?php echo $product->getMin_quantity(); ?>">
+        <input type="text" class="form-control form-control-sm" id="minQuantity" name="min_quantity" value="<?php echo $productDetails->getMin_quantity(); ?>">
     </div>
 
     <div class="mb-3">
         <label for="stockQuantity" class="form-label">Stock Quantity:</label>
-        <input type="text" class="form-control form-control-sm" id="stockQuantity" name="stock_quantity" value="<?php echo $product->getStock_quantity(); ?>">
+        <input type="text" class="form-control form-control-sm" id="stockQuantity" name="stock_quantity" value="<?php echo $productDetails->getStock_quantity(); ?>">
     </div>
-<?php endforeach; ?>
+<?php endif; ?>
     <div class="d-grid gap-2">
         <button type="submit" class="btn btn-primary" name="update">Update</button>
         <button type="submit" class="btn btn-danger" name="delete">Delete</button>

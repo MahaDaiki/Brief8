@@ -38,10 +38,10 @@ class OrderProductDAO {
         return $this->pdo->lastInsertId();
     }
 
-    public function deleteOrderProduct($orderProductId) {
+    public function deleteOrderProduct($order_id) {
         $query = "DELETE FROM orderproduct WHERE id = ?";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute([$orderProductId]);
+        $stmt->execute([$order_id]);
     }
 
     public function getProductPriceByReference($productRef) {
@@ -57,5 +57,24 @@ class OrderProductDAO {
             return null;
         }
     }
+    public function getOrderProducts($orderId)
+{
+    $query = "SELECT * FROM orderproduct WHERE order_id = ?";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute([$orderId]);
+
+    $orderProductsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $orderProducts = [];
+
+    foreach ($orderProductsData as $row) {
+        $orderProducts[] = new OrderProduct(
+            $row['order_id'],
+            $row['product_ref'],
+            $row['quantity']
+        );
+    }
+
+    return $orderProducts;
+}
 }
 ?>

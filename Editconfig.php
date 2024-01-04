@@ -27,7 +27,7 @@ if (isset($_GET['product_id'])) {
         $fetchingData = new FetchingData();
         $fetchingData->delete_product($productId);
 
-        echo '<srcipt>alert("Product deleted successfully!");</script>';
+        echo '<script>alert("Product deleted successfully!");</script>';
         header("Location: Display.php");
     }
 
@@ -36,7 +36,7 @@ if (isset($_GET['product_id'])) {
    
     if (!$productDetails) {
         header("Location: Edit.php");
-        exit();
+        
     }
 }
 ?>

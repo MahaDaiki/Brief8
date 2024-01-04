@@ -12,7 +12,7 @@ class CategoryDAO {
     }
 
     public function get_category(){
-        $query = "SELECT * FROM categories";
+        $query = "SELECT * FROM categories where bl = 1";
         $stmt = $this->db->query($query);
         $stmt -> execute();
         $categoryData = $stmt->fetchAll();
@@ -26,7 +26,7 @@ class CategoryDAO {
     }
     public function insert_category($Category){
         $query= "INSERT INTO categories VALUES ('".$Category->getCatname()."','".$Category->getDescrip()."','".$Category->getImgs()."',".$Category->getBl().") ";
-        $stmt = $this->db->query($query);
+        $stmt = $this->db->prepare($query);
         $stmt -> execute();
 
     }
@@ -40,9 +40,10 @@ class CategoryDAO {
 
     public function deleteCategory($categoryname){
         $query = "UPDATE categories SET bl = 0 WHERE catname = '" . $categoryname . "'";
-        $this->db->query($query);
+        $stmt = $this->db->query($query);
+        $stmt -> execute();
     }
-
+  
     public function displayCategoryDetails($categoryname) {
         $query = "SELECT * FROM categories WHERE catname = '" . $categoryname . "'";
         $result = $this->db->query($query);

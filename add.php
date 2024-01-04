@@ -1,6 +1,6 @@
 <?php
 require_once("productDAO.php");
-require_once("Editconfig.php");
+require_once("addconfig.php");
 require_once("categoryDAO.php");
 $product = new fetchingdata();
 ?>
@@ -18,41 +18,80 @@ $product = new fetchingdata();
 <nav class="navbar navbar-expand-sm navbar-dark ">
     <div class="container">
         <a href="#" class="navbar-brand">NE</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="index.php" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item">
-                <a href="Display.php" class="nav-link">items</a>
-            </li>
-        </ul>
-        <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
-        <div class="menuwrp" id="subMenu">
-            <div class="submenu">
-                <div class="userinfo">
-                    <?php
-                    // Check if an admin is logged in
-                    if (isset($_SESSION["admin_username"])) {
-                        $displayName = $_SESSION["admin_username"];
-                        $isAdmin = true;
-                    } elseif (isset($_SESSION["username"])) {
-                        $displayName = $_SESSION["username"];
-                        $isAdmin = false;
-                    }
-                    ?>
+        
+        <!-- Add the burger menu button for smaller screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="index.php" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Display.php" class="nav-link">items</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+    <a href="#" class="nav-link" data-toggle="modal" data-target="#cartModal">
+        <i class="fas fa-shopping-cart"></i> 
+    </a>
+</span>
+            <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="cartItems">
+            </div>
+            <div class="modal-footer">
+                <!-- <a href="confirmation.php" class="btn btn-danger">View Cart</a> -->
+                <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+            <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
+
+            <div class="menuwrp" id="subMenu"  style="z-index: 99">
+                <div class="submenu">
                     <div class="userinfo">
-                        <img src="img/user-286-128.png" alt="user">
-                        <h2>
-                            <?php echo $displayName; ?>
-                        </h2>
-                        <hr>
-                        <?php
-                        if ($isAdmin) {
-                            echo '<a href="adminpan.php">Admin Panel</a>';
-                        }
-                        ?>
-                        <div>
-                            <a href="logout.php">Log Out</a>
+                    <?php
+            session_start();
+            $displayName = '';
+            $isAdmin = false;
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } if (empty($displayName)) {
+                echo '<a href="login.php">Login</a>';
+            } else {
+                ?>
+                <div class="userinfo">
+                    <img src="img/user-286-128.png" alt="user">
+                    <h2>
+                        <?php echo $displayName; ?>
+                    </h2>
+                    <hr>
+                    <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel </a><br>';
+                    }
+                    echo '<a href="logout.php">Logout</a>'; 
+                    ?>
+                    <div>
+    <?php
+}
+?>
                         </div>
                     </div>
                 </div>

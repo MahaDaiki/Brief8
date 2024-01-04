@@ -14,9 +14,9 @@ class Product {
     private $bl;
     
 
-    public function __construct( $reference , $img , $productname, $barcode, $purchase_price, $final_price , $price_offer , $descrip , $min_quantity , $stock_quantity ,$category_name , $bl ){
+    public function __construct( $reference , $imgs , $productname, $barcode, $purchase_price, $final_price , $price_offer , $descrip , $min_quantity , $stock_quantity ,$category_name , $bl ){
         $this->reference = $reference;
-        $this->imgs = $img;
+        $this->imgs = $imgs;
         $this->productname = $productname;
         $this->barcode = $barcode;
         $this->purchase_price = $purchase_price;

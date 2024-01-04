@@ -12,7 +12,7 @@ class ClientDAO {
     }
 
     public function get_Clients(){
-        $query = "SELECT * FROM clients";
+        $query = "SELECT * FROM clients WHERE valide = 1 " ;
         $stmt = $this->db->query($query);
         $stmt -> execute();
         $clientData = $stmt->fetchAll();
@@ -54,14 +54,14 @@ class ClientDAO {
 
 
 
-    public function delete_Client($id){
-        $query = "UPDATE `clients` SET `valide`= 0 WHERE `id`=" . $id ;
+    public function delete_Client($id)
+{
+    $query = "UPDATE `clients` SET `valide` = 0 WHERE `id` = $id";
+    $this->db->query($query);
+    
+}
 
-        $stmt = $this->db->query($query);
-        $stmt -> execute();
-    }
-
-  
+ 
 
 
     

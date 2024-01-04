@@ -1,11 +1,36 @@
 <?php
 require_once("AdminDAO.php");
 require_once("ClientDAO.php");
+require_once("OrderProductDAO.php");
+require_once('OrderDAO.php');
 $Admin = new AdminDAO();
 $Admins = $Admin->get_Admins();
 
 $Clients = new ClientDAO();
 $Client = $Clients->get_Clients();
+$order = new OrderDAO();
+$orders = $order->getAllOrders();
+
+
+if (isset($_GET['cancel_order'])) {
+    $orderIdToCancel = $_GET['cancel_order'];
+
+    $orderDao = new OrderDAO();
+    $orderpDao= new OrderProductDAO();
+    $orderDao->deleteOrder($orderIdToCancel);
+    // $orderpDao->deleteOrderProduct($orderIdToCancel);
+    header("Location: adminpan.php");
+    
+
+}
+if (isset($_GET['delete_user'])) {
+    $userToDelete = $_GET['delete_user'];
+    $Clients->delete_Client($userToDelete);
+ 
+    header("Location: adminpan.php"); 
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +50,7 @@ $Client = $Clients->get_Clients();
                 <a href="home.php" class="nav-link">Home</a>
             </li>
             <li class="nav-item">
-                <a href="category.php" class="nav-link">Categories</a>
+                <a href="Display.php" class="nav-link">items</a>
             </li>
         </ul>
 
@@ -101,10 +126,7 @@ $Client = $Clients->get_Clients();
                     echo "<td>". $Clients->getAddress() ."</td>";
                     echo "<td>". $Clients->getCity() ."</td>";
                     echo "<td>";
-                    echo "<a href='adminpan.php?delete_user={".$Clients->getid()."}' class='btn btn-danger btn-sm mr-2'>Delete</a>";
-                    if (isset($row['valide']) && $Clients->getvalide() == 0) {
-                        echo "<a href='adminpan.php?verify_user={".$Clients->getid()."}' class='btn btn-success btn-sm mr-2'>Verify</a>";
-                    }
+                    echo "<a href='adminpan.php?delete_user={$Clients->getid()}' class='btn btn-danger btn-sm mr-2'>Delete</a>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -136,6 +158,44 @@ $Client = $Clients->get_Clients();
         </table>
     </div>
     </div>
+    <div class="container mt-5">
+    <h3 class="mt-5 text-center">Orders</h3>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Creation Date</th>
+                <th>Shipping Date</th>
+                <th>Delivery Date</th>
+                <th>Total Price</th>
+                <th>BL</th>
+                <th>Client ID</th>
+                <th>---</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+          foreach ($orders as $order) {
+            echo "<tr>";
+            echo "<td>" . $order->getId() . "</td>";
+            echo "<td>" . $order->getCreation_date() . "</td>";
+            echo "<td>" . $order->getShipping_date() . "</td>";
+            echo "<td>" . $order->getDelivery_date() . "</td>";
+            echo "<td>" . $order->getTotal_price() . "</td>";
+            echo "<td>" . $order->getBl() . "</td>";
+            echo "<td>" . $order->getClient_id() . "</td>";
+            // echo "<td>" . $order->getUsername() . " </td>";
+            echo "<td>";
+            echo "<a href='order_details.php?order_id={$order->getId()}' class='btn btn-info btn-sm mr-2'>Detail</a>";
+            echo "  <a href='adminpan.php?cancel_order={$order->getId()}' class='btn btn-danger btn-sm' onclick=\"return confirm('Are you sure you want to cancel this order?')\">Cancel</a>";
+            echo "</td>";
+            echo "</tr>";
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
+
     <footer class=" bg-primary text-light text-center text-lg-start">
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
       © 2023 Copyright:ElectroNacer

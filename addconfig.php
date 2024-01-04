@@ -1,19 +1,17 @@
 <?php
 require_once("productDAO.php");
-if (isset($_SESSION["admin_username"])) {
-    $displayName = $_SESSION["admin_username"];
-    $isAdmin = true;
-} elseif (isset($_SESSION["username"])) {
-    $displayName = $_SESSION["username"];
-    $isAdmin = false;
-}
+require_once("Classproducts.php");
 
-
-
+// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $loopCount = count($_POST['productname']); 
+    $productManager = new fetchingdata();
 
+    // Get the count of products submitted
+    $loopCount = count($_POST['productname']);
+
+    // Loop through the submitted data
     for ($i = 0; $i < $loopCount; $i++) {
+        // Retrieve values from the form
         $productname = $_POST['productname'][$i];
         $barcode = $_POST['barcode'][$i];
         $purchase_price = $_POST['purchase_price'][$i];
@@ -31,23 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         move_uploaded_file($_FILES['imgs']['tmp_name'][$i], $imageFilePath);
 
-        // Create an instance of your product class
-        $Products = new fetchingdata(); 
+        $product = new Product(
+            null, 
+            $imageFilePath,
+            $productname,
+            $barcode,
+            $purchase_price,
+            $final_price,
+            $price_offer,
+            $descrip,
+            $min_quantity,
+            $stock_quantity,
+            $category_name,
+            1
+        );
 
-        // Assign values directly to class properties
-        $Products->productname = $productname;
-        $Products->barcode = $barcode;
-        $Products->purchase_price = $purchase_price;
-        $Products->final_price = $final_price;
-        $Products->price_offer = $price_offer;
-        $Products->descrip = $descrip;
-        $Products->min_quantity = $min_quantity;
-        $Products->stock_quantity = $stock_quantity;
-        $Products->category_name = $category_name;
-
-        // You can now use $Products as needed, for example:
-        $productManager = new fetchingdata(); 
-        $productManager->insert_product($Products, $imageFilePath);
+        // Insert the product into the database
+        $productManager->insert_Product($product, $imageFilePath);
     }
 }
 ?>

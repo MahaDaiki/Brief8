@@ -1,6 +1,7 @@
 <?php
 require_once("ManageConfig.php");
 require_once("categoryDAO.php");
+require_once("manageadd.php");
 $category = new CategoryDAO();
 $Categories = $category->get_category();
 
@@ -98,10 +99,10 @@ $Categories = $category->get_category();
             <td><?php echo $category->getDescrip(); ?></td>
             <td><img src="<?php echo $category->getImgs(); ?>" alt="Category Image" style="max-width: 100px;"></td>
             <td>
-     
-            <a href="editcat.php?category_name=<?php echo $category->getCatname(); ?>">Edit</a>
+            |
+             <a href="editcat.php?category_name=<?php echo $category->getCatname(); ?>">Edit</a>
                     |
-                <a href="?delete_category=<?php echo $category->getCatname(); ?>" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                
             </td>
         </tr>
     <?php } ?>
